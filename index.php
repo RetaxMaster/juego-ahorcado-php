@@ -1,10 +1,60 @@
 <?php
+
 function clear() {
 
     if (PHP_OS === "WINNT")
         system("cls");
     else
         system("clear");
+
+}
+
+function check_letters($word, $letter, $discovered_letters) {
+
+    $offset = 0;
+    while ( ( $letter_position = strpos($word, $letter, $offset) ) !== false ) {
+
+        $discovered_letters[$letter_position] = $letter;
+        $offset = $letter_position + 1;
+
+    }
+
+    return $discovered_letters;
+    
+}
+
+function print_wrong_letter() {
+
+    clear();
+    $GLOBALS["attempts"]++;
+    echo "Letra incorrecta 😾. Te quedan " . (MAX_ATTEMPTS - $GLOBALS["attempts"]) . " intentos.";
+    sleep(2);
+
+}
+
+function print_game() {
+
+    global $word_length, $discovered_letters;
+
+    echo "Palabra de $word_length letras: \n\n";
+    echo $discovered_letters;
+    echo "\n\n";
+
+}
+
+function end_game() {
+
+    global $attempts, $choosen_word, $discovered_letters;
+    
+    clear();
+
+    if ($attempts < MAX_ATTEMPTS) 
+        echo "¡Felicidades! Has adivinado la palabra. 😸 \n\n";
+    else
+        echo "Suerte para la próxima, amigo. 😿 \n\n";
+
+    echo "La palabra es: $choosen_word\n";
+    echo "Tú descubriste: $discovered_letters";
 
 }
 
@@ -24,9 +74,7 @@ $attempts = 0;
 do {
 
     // Damos la bienvenida al jugador
-    echo "Palabra de $word_length letras: \n\n";
-    echo $discovered_letters;
-    echo "\n\n";
+    print_game();
 
     // Pedimos que escriba
     $player_letter = readline("Escribe una letra: ");
@@ -34,42 +82,27 @@ do {
 
     // Empezamos a validar
     if ( str_contains($choosen_word, $player_letter) ) {
-        
-        // Verificamos todas las ocurrencias de esta letra para reemplazarla
-        $offset = 0;
-        while ( ( $letter_position = strpos($choosen_word, $player_letter, $offset) ) !== false ) {
-
-            $discovered_letters[$letter_position] = $player_letter;
-            $offset = $letter_position + 1;
-
-        }
-
+        $discovered_letters = check_letters($choosen_word, $player_letter, $discovered_letters);
     }
     else {
-
-        // Informamos que esta letra no fue la correcta
-        clear();
-        $attempts++;
-        echo "Letra incorrecta 😾. Te quedan " . (MAX_ATTEMPTS - $attempts) . " intentos.";
-        sleep(2);
-
+        print_wrong_letter();
     }
 
     clear();
 
 } while($attempts < MAX_ATTEMPTS && $discovered_letters != $choosen_word);
 
-clear();
-
-if ($attempts < MAX_ATTEMPTS) 
-    echo "¡Felicidades! Has adivinado la palabra. 😸 \n\n";
-else
-    echo "Suerte para la próxima, amigo. 😿 \n\n";
-
-echo "La palabra es: $choosen_word\n";
-echo "Tú descubriste: $discovered_letters";
+end_game();
 
 echo "\n";
 
-// Ideas a mejorar (retos): Que al termianr el juego ganado diga cuantos intentos le quedó. 
+/*
+
+Ideas a mejorar (retos):
+
+- Que al terminar el juego ganado diga cuantos intentos le quedó.
+- Que al terminar pregunte si quiere jugar de nuevo y reinicie el juego.
+- 
+
+*/
 
