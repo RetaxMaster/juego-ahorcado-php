@@ -32,9 +32,108 @@ function print_wrong_letter() {
 
 }
 
+function print_man() {
+
+    global $attempts;
+    
+    switch ($attempts) {
+
+        case 0:
+            echo "
+            +---+
+            |   |
+                |
+                |
+                |
+                |
+            =========
+            ";
+            break;
+           
+        case 1:
+            echo "
+            +---+
+            |   |
+            O   |
+                |
+                |
+                |
+            =========
+            ";
+            break;
+
+        case 2:
+            echo "
+            +---+
+            |   |
+            O   |
+            |   |
+                |
+                |
+            =========
+            ";
+            break;
+
+        case 3:
+            echo "
+            +---+
+            |   |
+            O   |
+           /|   |
+                |
+                |
+            =========
+            ";
+            break;
+
+        case 4:
+            echo "
+            +---+
+            |   |
+            O   |
+           /|\  |
+                |
+                |
+            =========
+            ";
+            break;
+
+        case 5:
+            echo "
+            +---+
+            |   |
+            O   |
+           /|\  |
+           /    |
+                |
+            =========
+            ";
+            break;
+
+        case 6:
+            echo "
+            Me mataste we
+            +---+
+            |   |
+            O   |
+           /|\  |
+           / \  |
+                |
+            =========
+            ";
+            break;
+
+    }
+
+    echo "\n\n";
+
+}
+
 function print_game() {
 
     global $word_length, $discovered_letters;
+
+    print_man();
 
     echo "Palabra de $word_length letras: \n\n";
     echo $discovered_letters;
@@ -48,10 +147,15 @@ function end_game() {
     
     clear();
 
-    if ($attempts < MAX_ATTEMPTS) 
+    if ($attempts < MAX_ATTEMPTS) {
         echo "¡Felicidades! Has adivinado la palabra. 😸 \n\n";
-    else
+    }
+    else {
+
         echo "Suerte para la próxima, amigo. 😿 \n\n";
+        print_man();
+
+    }
 
     echo "La palabra es: $choosen_word\n";
     echo "Tú descubriste: $discovered_letters";
